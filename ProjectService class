@@ -1,0 +1,65 @@
+package com.klef.jfsd.exam;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class ProjectService {
+    @Autowired
+    private EntityManager entityManager;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    // Insert projects
+    public void addProjects(List<Project> projects) {
+        projectRepository.saveAll(projects);
+    }
+
+    // Aggregate functions using Criteria API
+    public long countProjects() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Project> root = cq.from(Project.class);
+        cq.select(cb.count(root));
+        return entityManager.createQuery(cq).getSingleResult();
+    }
+
+    public double maxBudget() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<Project> root = cq.from(Project.class);
+        cq.select(cb.max(root.get("budget")));
+        return entityManager.createQuery(cq).getSingleResult();
+    }
+
+    public double minBudget() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<Project> root = cq.from(Project.class);
+        cq.select(cb.min(root.get("budget")));
+        return entityManager.createQuery(cq).getSingleResult();
+    }
+
+    public double sumBudget() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<Project> root = cq.from(Project.class);
+        cq.select(cb.sum(root.get("budget")));
+        return entityManager.createQuery(cq).getSingleResult();
+    }
+
+    public double avgBudget() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Double> cq = cb.createQuery(Double.class);
+        Root<Project> root = cq.from(Project.class);
+        cq.select(cb.avg(root.get("budget")));
+        return entityManager.createQuery(cq).getSingleResult();
+    }
+}
