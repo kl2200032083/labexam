@@ -1,0 +1,58 @@
+package com.klef.jfsd.exam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+@RestController
+@RequestMapping("/projects")
+public class ProjectController {
+    @Autowired
+    private ProjectService projectService;
+
+    @PostMapping("/add")
+    public String addProjects() {
+        Project p1 = new Project();
+        p1.setProjectName("AI Research");
+        p1.setDuration(12);
+        p1.setBudget(50000.0);
+        p1.setTeamLead("John Doe");
+
+        Project p2 = new Project();
+        p2.setProjectName("Web Development");
+        p2.setDuration(6);
+        p2.setBudget(20000.0);
+        p2.setTeamLead("Jane Smith");
+
+        List<Project> projects = Arrays.asList(p1, p2);
+        projectService.addProjects(projects);
+        return "Projects added successfully!";
+    }
+
+    @GetMapping("/count")
+    public long countProjects() {
+        return projectService.countProjects();
+    }
+
+    @GetMapping("/max-budget")
+    public double maxBudget() {
+        return projectService.maxBudget();
+    }
+
+    @GetMapping("/min-budget")
+    public double minBudget() {
+        return projectService.minBudget();
+    }
+
+    @GetMapping("/sum-budget")
+    public double sumBudget() {
+        return projectService.sumBudget();
+    }
+
+    @GetMapping("/avg-budget")
+    public double avgBudget() {
+        return projectService.avgBudget();
+    }
+}
